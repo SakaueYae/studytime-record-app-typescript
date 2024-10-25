@@ -14,6 +14,7 @@ function App() {
     title: "",
     time: 0,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const {
     isOpen: formModalIsOpen,
     onOpen: formModalOnOpen,
@@ -25,14 +26,21 @@ function App() {
     onClose: deleteModalOnClose,
   } = useDisclosure();
 
+  const displayRecords = async () => {
+    const records = await getRecords();
+    setRecords(records);
+  };
+
   useEffect(() => {
     (async () => {
-      const records = await getRecords();
-      setRecords(records);
+      await displayRecords();
+      setIsLoading(false);
     })();
   }, []);
 
-  return (
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <>
       <h1>Study Time Record App</h1>
       <Table
@@ -49,7 +57,10 @@ function App() {
       <FormModal
         isOpen={formModalIsOpen}
         defaultValue={defaultValue}
-        onClose={formModalOnClose}
+        onClose={() => {
+          formModalOnClose();
+          displayRecords();
+        }}
       />
       <Button
         colorScheme="teal"
@@ -63,7 +74,10 @@ function App() {
       <DeleteModal
         record={deleteRecord}
         isOpen={deleteModalIsOpen}
-        onClose={deleteModalOnClose}
+        onClose={() => {
+          deleteModalOnClose();
+          displayRecords();
+        }}
       />
     </>
   );
