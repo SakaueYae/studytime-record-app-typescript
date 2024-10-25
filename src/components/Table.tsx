@@ -7,20 +7,25 @@ import {
   Tbody,
   Td,
 } from "@chakra-ui/react";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Record } from "../domain/record";
 
 type TableProps = {
   records: Record[];
+  onEdit: (record: Record) => void;
+  onDelete: (record: Record) => void;
 };
 
-export const Table = ({ records }: TableProps) => {
+export const Table = ({ records, onEdit, onDelete }: TableProps) => {
   return (
     <TableContainer>
       <ChakraTable variant="simple">
         <Thead>
           <Tr>
             <Th>タイトル</Th>
-            <Th isNumeric>勉強時間</Th>
+            <Th>勉強時間</Th>
+            <Th></Th>
+            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -28,6 +33,20 @@ export const Table = ({ records }: TableProps) => {
             <Tr key={record.id}>
               <Td>{record.title}</Td>
               <Td>{record.time}</Td>
+              <Td
+                textAlign="center"
+                cursor="pointer"
+                onClick={() => onEdit(record)}
+              >
+                <EditIcon />
+              </Td>
+              <Td
+                textAlign="center"
+                cursor="pointer"
+                onClick={() => onDelete(record)}
+              >
+                <DeleteIcon />
+              </Td>
             </Tr>
           ))}
         </Tbody>

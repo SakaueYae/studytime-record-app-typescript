@@ -13,25 +13,42 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
-import { FormRecord } from "../domain/record";
+import { Record } from "../domain/record";
 import { createRecord } from "../models/createRecord";
+import { updateRecord } from "../models/updateRecord";
+import { useEffect } from "react";
 
 type FormModalProps = {
   isOpen: boolean;
+  defaultValue: Record | null;
   onClose: () => void;
 };
 
-export const FormModal = ({ isOpen, onClose }: FormModalProps) => {
+export const FormModal = ({
+  isOpen,
+  defaultValue,
+  onClose,
+}: FormModalProps) => {
   const {
     register,
     handleSubmit,
     setError,
     reset,
     formState: { errors },
-  } = useForm<FormRecord>();
-  const onSubmit = async (value: FormRecord) => {
+  } = useForm<Record>();
+
+  useEffect(() => {
+    reset({
+      id: defaultValue?.id,
+      title: defaultValue?.title,
+      time: defaultValue?.time,
+    });
+  }, [defaultValue, reset]);
+
+  const onSubmit = async (value: Record) => {
     try {
-      await createRecord(value);
+      if (value.id) await updateRecord(value);
+      else await createRecord(value);
       handleClose();
     } catch (e) {
       console.log(e);
@@ -42,6 +59,7 @@ export const FormModal = ({ isOpen, onClose }: FormModalProps) => {
       console.log(errors);
     }
   };
+
   const handleClose = () => {
     reset();
     onClose();
