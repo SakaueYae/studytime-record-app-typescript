@@ -10,14 +10,6 @@ const records = [...Array(4)].map(
 
 const mockStudyRecords = jest.fn().mockResolvedValue(records);
 
-const mockDeletedStudyRecords = jest
-  .fn()
-  .mockResolvedValue(
-    [...Array(3)].map(
-      (_, i) => new Record(String(i + 1), `タイトル${i + 1}`, i + 1)
-    )
-  );
-
 jest.mock("../models/getRecords", () => {
   return {
     getRecords: () => mockStudyRecords(),
