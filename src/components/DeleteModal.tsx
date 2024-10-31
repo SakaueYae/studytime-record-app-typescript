@@ -33,13 +33,13 @@ export const DeleteModal = ({ record, isOpen, onClose }: DeleteModalProps) => {
         <ModalCloseButton />
         <ModalBody>
           <Text>以下の記録を削除します。よろしいでしょうか？</Text>
-          <Box display="flex">
+          <Box display="flex" gap="10">
             <Text>{record.title}</Text>
             <Text>{record.time}h</Text>
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" mr={3}>
+          <Button variant="ghost" mr={3} onClick={onClose}>
             キャンセル
           </Button>
           <Button
