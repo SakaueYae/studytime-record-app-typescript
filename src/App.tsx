@@ -39,10 +39,10 @@ function App() {
   }, []);
 
   return isLoading ? (
-    <div>Loading...</div>
+    <div data-testid="loading">Loading...</div>
   ) : (
     <>
-      <h1>Study Time Record App</h1>
+      <h1 data-testid="title">Study Time Record App</h1>
       <Table
         records={records}
         onEdit={(record) => {
@@ -68,6 +68,7 @@ function App() {
           setDefaultValue(null);
           formModalOnOpen();
         }}
+        data-testid="createButton"
       >
         新規登録
       </Button>

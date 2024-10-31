@@ -18,7 +18,7 @@ type TableProps = {
 
 export const Table = ({ records, onEdit, onDelete }: TableProps) => {
   return (
-    <TableContainer>
+    <TableContainer data-testid="table">
       <ChakraTable variant="simple">
         <Thead>
           <Tr>
@@ -41,6 +41,7 @@ export const Table = ({ records, onEdit, onDelete }: TableProps) => {
                 <EditIcon />
               </Td>
               <Td
+                data-testid="delete-icon"
                 textAlign="center"
                 cursor="pointer"
                 onClick={() => onDelete(record)}

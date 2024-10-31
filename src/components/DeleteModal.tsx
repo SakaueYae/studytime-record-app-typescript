@@ -42,7 +42,11 @@ export const DeleteModal = ({ record, isOpen, onClose }: DeleteModalProps) => {
           <Button variant="ghost" mr={3}>
             キャンセル
           </Button>
-          <Button colorScheme="red" onClick={onDelete}>
+          <Button
+            colorScheme="red"
+            onClick={onDelete}
+            data-testid="delete-button"
+          >
             削除
           </Button>
         </ModalFooter>

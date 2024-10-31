@@ -69,7 +69,9 @@ export const FormModal = ({
     <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader data-testid="formModal-title">
+          {defaultValue ? "記録編集" : "新規作成"}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,8 +83,9 @@ export const FormModal = ({
                 {...register("title", {
                   required: "内容の入力は必須です",
                 })}
+                data-testid="title-input"
               />
-              <FormErrorMessage>
+              <FormErrorMessage data-testid="title-error">
                 {errors.title && errors.title.message}
               </FormErrorMessage>
             </FormControl>
@@ -99,8 +102,9 @@ export const FormModal = ({
                     message: "時間は0以上である必要があります",
                   },
                 })}
+                data-testid="time-input"
               />
-              <FormErrorMessage>
+              <FormErrorMessage data-testid="time-error">
                 {errors.time && errors.time.message}
               </FormErrorMessage>
               <FormControl isInvalid={!!errors.root?.server}>
@@ -115,7 +119,11 @@ export const FormModal = ({
           <Button variant="ghost" mr={3} onClick={handleClose}>
             閉じる
           </Button>
-          <Button colorScheme="teal" onClick={handleSubmit(onSubmit)}>
+          <Button
+            colorScheme="teal"
+            onClick={handleSubmit(onSubmit)}
+            data-testid="save-button"
+          >
             保存
           </Button>
         </ModalFooter>
