@@ -1,0 +1,29 @@
+# ワークフローの名前
+name: Deploy to Live Channel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_live_website:
+    runs-on: ubuntu-latest
+    steps:
+      # リポジトリのファイルを取ってくる
+      - uses: actions/checkout@v4
+      # Nodeを使えるようにする
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # npmパッケージのインストール
+      - run: npm ci
+      # ビルド
+      - run: npm run build
+      # firebaseへデプロイ
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STUDYTIME_RECORD_APP_TYPESCRIPT }}"
+          projectId: studytime-record-app-ts
+          channelId: live
