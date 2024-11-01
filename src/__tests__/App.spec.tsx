@@ -9,6 +9,11 @@ const records = [...Array(4)].map(
 );
 
 const mockStudyRecords = jest.fn().mockResolvedValue(records);
+const mockDeleteStudyRecords = jest.fn().mockImplementation((id: string) => {
+  const index = records.findIndex((value) => value.id === id);
+  records.splice(index, 1);
+  return new Promise((resolve) => resolve(records));
+});
 
 jest.mock("../models/getRecords", () => {
   return {
@@ -17,7 +22,7 @@ jest.mock("../models/getRecords", () => {
 });
 jest.mock("../models/deleteRecord", () => {
   return {
-    deleteRecord: () => jest.fn().mockResolvedValue(records.splice(-1)),
+    deleteRecord: (id: string) => mockDeleteStudyRecords(id),
   };
 });
 
@@ -68,13 +73,11 @@ describe("App", () => {
     );
     await waitFor(() => screen.getByTestId("title"));
     const deleteIcons = screen.getAllByTestId("delete-icon");
-    await userEvent.click(deleteIcons[deleteIcons.length - 1]);
-    await waitFor(() => screen.getByTestId("delete-button"));
+    const index = Math.floor(Math.random() * deleteIcons.length);
+    await userEvent.click(deleteIcons[index]);
     const deleteButton = screen.getByTestId("delete-button");
     await userEvent.click(deleteButton);
-    // expect(mockDeletedStudyRecords).toHaveBeenCalled();
     const rows = screen.getByTestId("table").querySelectorAll("tr");
-    screen.debug();
     expect(rows.length - 1).toBe(3);
   });
 });
@@ -110,7 +113,6 @@ describe("FormModal", () => {
 
   test("未入力のエラー", async () => {
     await userEvent.click(screen.getByTestId("save-button"));
-    screen.getByRole("");
     expect(
       screen.getByTestId("title-error") && screen.getByTestId("time-error")
     ).toBeDefined();
